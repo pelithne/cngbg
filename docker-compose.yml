@@ -1,0 +1,77 @@
+services:
+
+## ----------------- Apps
+  dinner-api:
+    image: ${DOCKER_REGISTRY-}dinner-api
+    build:
+      context: src\dinner-api
+    ports:
+      - 5010:80
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+  dinner-api-dapr:
+    image: daprio/daprd:1.10.6
+    command: ["./daprd",
+     "-app-id", "dinner-api",
+     "-app-port", "80",
+     "-resources-path", "./components"]   
+    volumes:
+      - "./dapr/docker/:/components"
+    depends_on:
+      dinner-api:
+        condition: service_started
+    network_mode: "service:dinner-api"
+
+  processor:
+    image: ${DOCKER_REGISTRY-}processor
+    build:
+      context: src\ai-processor
+    ports:
+      - 5011:80
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      AZURE_OPENAI_API_MODEL: ${AZURE_OPENAI_API_MODEL}
+      AZURE_OPENAI_API_ENDPOINT: ${AZURE_OPENAI_API_ENDPOINT}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
+    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+  processor-dapr:
+    image: daprio/daprd:1.10.6
+    command: ["./daprd",
+     "-app-id", "ai-processor",
+     "-app-port", "80",
+     "-resources-path", "./components"]   
+    volumes:
+      - "./dapr/docker/:/components"
+    depends_on:
+      processor:
+        condition: service_started
+    network_mode: "service:processor"
+
+## ----------------- Infra
+  redis:
+    image: redis:latest
+    ports:
+      - 6380:6379
+
+  # zipkin:
+  #   image: openzipkin/zipkin:latest
+  #   ports:
+  #     - 9412:9411
+  #   environment:
+  #     JAVA_OPTS: '-Xms1g -Xmx1g -XX:+ExitOnOutOfMemoryError'
+
+  # otel-collector:
+  #   image: otel/opentelemetry-collector-contrib:0.75.0
+  #   command: ["--config=conf/config.yaml"]
+  #   environment:
+  #     - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${APPLICATION_INSIGHTS_INSTRUMENTATION_KEY}
+  #   volumes:
+  #     - ./docker/otel-collector-config.yaml:/conf/config.yaml
+
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - 5341:80
+    environment:
+      - ACCEPT_EULA=Y

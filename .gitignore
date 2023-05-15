@@ -1,0 +1,26 @@
+# Tools
+.idea
+*.suo
+*.user
+*.sln.docstates
+*.sln.ide/
+*.userprefs
+.vs
+
+# Outputs
+publish
+results
+
+# Docker env
+.env
+
+# Build related
+tools
+
+# .NET
+[Bb]in/
+[Oo]bj/
+[Pp]ackages/
+
+# Apple directory
+.DS_Store

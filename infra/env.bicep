@@ -105,7 +105,7 @@ resource sb_ns 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
   }
 
   resource topic 'topics' = {
-    name: 'dinner-prompts'
+    name: 'dinner-meals-requests'
     properties: {
       supportOrdering: true
     }
@@ -171,6 +171,10 @@ resource pubsub_component 'Microsoft.App/managedEnvironments/daprComponents@2022
       {
         name: 'namespaceName'
         value: '${sb_ns.name}.servicebus.windows.net'
+      }
+      {
+        name: 'maxActiveMessages'
+        value: '1'
       }
       {
         name: 'consumerID'

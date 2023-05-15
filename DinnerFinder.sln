@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hosts", "hosts", "{73F9B8C2-8005-48F4-A4EF-F8163B998216}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DinnerApi", "src\dinner-api\DinnerApi.csproj", "{34A081D7-48D0-4003-9766-B9C09AECEA09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiProcessor", "src\ai-processor\AiProcessor.csproj", "{28682065-414F-40A8-B125-9680EAC8E946}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34A081D7-48D0-4003-9766-B9C09AECEA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A081D7-48D0-4003-9766-B9C09AECEA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A081D7-48D0-4003-9766-B9C09AECEA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A081D7-48D0-4003-9766-B9C09AECEA09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28682065-414F-40A8-B125-9680EAC8E946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28682065-414F-40A8-B125-9680EAC8E946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28682065-414F-40A8-B125-9680EAC8E946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28682065-414F-40A8-B125-9680EAC8E946}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{34A081D7-48D0-4003-9766-B9C09AECEA09} = {73F9B8C2-8005-48F4-A4EF-F8163B998216}
+		{28682065-414F-40A8-B125-9680EAC8E946} = {73F9B8C2-8005-48F4-A4EF-F8163B998216}
+	EndGlobalSection
+EndGlobal
