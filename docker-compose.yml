@@ -27,8 +27,6 @@ services:
     image: ${DOCKER_REGISTRY-}processor
     build:
       context: src\ai-processor
-    ports:
-      - 5011:80
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       AZURE_OPENAI_API_MODEL: ${AZURE_OPENAI_API_MODEL}
@@ -47,6 +45,28 @@ services:
       processor:
         condition: service_started
     network_mode: "service:processor"
+
+  email-sender:
+    image: ${DOCKER_REGISTRY-}email-sender
+    build:
+      context: src\email-sender
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      AZURE_COMMUNICATION_ENDPOINT: ${AZURE_COMMUNICATION_ENDPOINT}
+      AZURE_COMMUNICATION_FROM_ADDRESS: ${AZURE_COMMUNICATION_FROM_ADDRESS}
+    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+  email-sender-dapr:
+    image: daprio/daprd:1.10.6
+    command: ["./daprd",
+     "-app-id", "email-sender",
+     "-app-port", "80",
+     "-resources-path", "./components"]   
+    volumes:
+      - "./dapr/docker/:/components"
+    depends_on:
+      email-sender:
+        condition: service_started
+    network_mode: "service:email-sender"
 
 ## ----------------- Infra
   redis:

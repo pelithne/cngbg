@@ -1,4 +1,7 @@
-﻿namespace DinnerApi.Modules.Recipes;
+﻿using Dapr.Client;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DinnerApi.Modules.Recipes;
 
 public static class RecipesApi
 {
@@ -9,8 +12,12 @@ public static class RecipesApi
         group.MapGet("{id}", GetRecipe);
     }
 
-    private static async Task<IResult> GetRecipe(string id)
+    private static async Task<IResult> GetRecipe(string id, [FromServices] DaprClient client)
     {
-        return TypedResults.NotFound();
+        var recipe = await client.GetStateAsync<GeneratedRecipe>("recipes", id);
+        if (recipe == null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(new RecipeResponse(recipe.RecipeId, recipe.Recipe));
     }
 }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DinnerApi", "src\dinner-api
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiProcessor", "src\ai-processor\AiProcessor.csproj", "{28682065-414F-40A8-B125-9680EAC8E946}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSender", "src\email-sender\EmailSender.csproj", "{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,9 +25,14 @@ Global
 		{28682065-414F-40A8-B125-9680EAC8E946}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28682065-414F-40A8-B125-9680EAC8E946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28682065-414F-40A8-B125-9680EAC8E946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34A081D7-48D0-4003-9766-B9C09AECEA09} = {73F9B8C2-8005-48F4-A4EF-F8163B998216}
 		{28682065-414F-40A8-B125-9680EAC8E946} = {73F9B8C2-8005-48F4-A4EF-F8163B998216}
+		{77F14529-DF9F-47B2-8CA3-E2F5A048B0DC} = {73F9B8C2-8005-48F4-A4EF-F8163B998216}
 	EndGlobalSection
 EndGlobal

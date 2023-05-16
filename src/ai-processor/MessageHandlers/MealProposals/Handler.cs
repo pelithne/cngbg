@@ -1,4 +1,5 @@
 ﻿using Dapr;
+using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -14,10 +15,17 @@ public static class MealProposalHandler
     }
 
     [Topic("pubsub", "dinner-meals-requests")]
-    private static async Task<IResult> Handler(ProposedDinnerMealRequestEvent mealRequestEvent, [FromServices]MealProposalProcessor processor)
+    private static async Task<IResult> Handler(ProposedDinnerMealRequestEvent mealRequestEvent, [FromServices]MealProposalProcessor processor, [FromServices]DaprClient daprClient)
     {
-        var recipe = await processor.Process(mealRequestEvent.MainComponent);
-        Log.Information(recipe);
+        var recipe = await processor.GenerateRecipe(mealRequestEvent.MainComponent);
+        
+        await daprClient.SaveStateAsync("recipes", mealRequestEvent.RecipeId, new GeneratedRecipe(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, recipe));
+        
+        Log.Information("Recipe generated with id: {RecipeId}", mealRequestEvent.RecipeId);
+        
+        if (mealRequestEvent.Email != null)
+            await daprClient.PublishEventAsync("pubsub", "recipes-notifications", new RecipeNotificationEvent(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, mealRequestEvent.Email, recipe));
+        
         return TypedResults.Ok();
     }
 }

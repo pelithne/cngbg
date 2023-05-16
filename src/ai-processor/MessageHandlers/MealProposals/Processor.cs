@@ -16,7 +16,7 @@ public class MealProposalProcessor
             new AzureKeyCredential(configuration["AZURE_OPENAI_API_KEY"]));
     }
     
-    public async Task<string> Process(string mainComponent)
+    public async Task<string> GenerateRecipe(string mainComponent)
     {
         var response = await _client.GetChatCompletionsAsync(_model, new ChatCompletionsOptions
         {
@@ -58,6 +58,4 @@ public class MealProposalProcessor
         "<li>Brush the egg wash over the top and sides of the pastry and bake for 35-40 minutes or until the pastry is golden brown.</li> " +
         "<li>Let rest for 10 minutes before slicing.</li> </ol> " +
         "<p>Serve with roasted vegetables and a red wine sauce for a truly indulgent meal.</p>";
-
-    
 }
