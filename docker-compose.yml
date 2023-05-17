@@ -1,3 +1,8 @@
+
+x-common-variables: &common-variables
+  ASPNETCORE_ENVIRONMENT: Development
+  OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+
 services:
 
 ## ----------------- Apps
@@ -8,14 +13,14 @@ services:
     ports:
       - 5010:80
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+      <<: *common-variables
   dinner-api-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
      "-app-id", "dinner-api",
      "-app-port", "80",
-     "-resources-path", "./components"]   
+     "-resources-path", "./components",
+     "-config", "./components/config.yaml"]   
     volumes:
       - "./dapr/docker/:/components"
     depends_on:
@@ -28,17 +33,17 @@ services:
     build:
       context: src\ai-processor
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      <<: *common-variables
       AZURE_OPENAI_API_MODEL: ${AZURE_OPENAI_API_MODEL}
       AZURE_OPENAI_API_ENDPOINT: ${AZURE_OPENAI_API_ENDPOINT}
       AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
-    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
   processor-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
      "-app-id", "ai-processor",
      "-app-port", "80",
-     "-resources-path", "./components"]   
+     "-resources-path", "./components",
+     "-config", "./components/config.yaml"]   
     volumes:
       - "./dapr/docker/:/components"
     depends_on:
@@ -51,16 +56,16 @@ services:
     build:
       context: src\email-sender
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      <<: *common-variables
       AZURE_COMMUNICATION_ENDPOINT: ${AZURE_COMMUNICATION_ENDPOINT}
       AZURE_COMMUNICATION_FROM_ADDRESS: ${AZURE_COMMUNICATION_FROM_ADDRESS}
-    #   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
   email-sender-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
      "-app-id", "email-sender",
      "-app-port", "80",
-     "-resources-path", "./components"]   
+     "-resources-path", "./components",
+     "-config", "./components/config.yaml"]   
     volumes:
       - "./dapr/docker/:/components"
     depends_on:
@@ -74,20 +79,20 @@ services:
     ports:
       - 6380:6379
 
-  # zipkin:
-  #   image: openzipkin/zipkin:latest
-  #   ports:
-  #     - 9412:9411
-  #   environment:
-  #     JAVA_OPTS: '-Xms1g -Xmx1g -XX:+ExitOnOutOfMemoryError'
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - 9412:9411
+    environment:
+      JAVA_OPTS: '-Xms1g -Xmx1g -XX:+ExitOnOutOfMemoryError'
 
-  # otel-collector:
-  #   image: otel/opentelemetry-collector-contrib:0.75.0
-  #   command: ["--config=conf/config.yaml"]
-  #   environment:
-  #     - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${APPLICATION_INSIGHTS_INSTRUMENTATION_KEY}
-  #   volumes:
-  #     - ./docker/otel-collector-config.yaml:/conf/config.yaml
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.75.0
+    command: ["--config=conf/config.yaml"]
+    environment:
+      - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${APPLICATION_INSIGHTS_INSTRUMENTATION_KEY}
+    volumes:
+      - ./docker/otel-collector-config.yaml:/conf/config.yaml
 
   seq:
     image: datalust/seq:latest

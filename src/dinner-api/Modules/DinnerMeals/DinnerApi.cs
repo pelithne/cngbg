@@ -19,7 +19,7 @@ public static class DinnerApi
         var recipeId = Guid.NewGuid().ToString();
         var proposedDinnerMealRequestEvent = new ProposedDinnerMealRequestEvent(recipeId, request.MainComponent, request.Email);
 
-        await client.PublishEventAsync("pubsub", "dinner-meals-requests", proposedDinnerMealRequestEvent);
+        await client.PublishEventAsync("requests", "dinner-meal-requests", proposedDinnerMealRequestEvent);
         
         DinnerMetrics.DinnerMealsProposedTotal.Add(1);
         

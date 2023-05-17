@@ -9,12 +9,12 @@ public static class RecipesNotificationsHandler
 {
     public static void MapRecipesNotificationHandler(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("recipes-notifications");
+        var group = app.MapGroup("recipe-notifications");
 
         group.MapPost("event-handler", Handler);
     }
 
-    [Topic("pubsub", "recipes-notifications")]
+    [Topic("notifications", "recipe-notifications")]
     private static async Task<IResult> Handler(RecipeNotificationEvent recipeNotificationEvent, [FromServices]RecipeEmailSender recipeEmailSender)
     {
         var result = await recipeEmailSender.SendEmail(recipeNotificationEvent.Email, recipeNotificationEvent.Recipe);

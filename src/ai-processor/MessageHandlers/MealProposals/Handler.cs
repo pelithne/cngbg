@@ -14,7 +14,7 @@ public static class MealProposalHandler
         group.MapPost("event-handler", Handler);
     }
 
-    [Topic("pubsub", "dinner-meals-requests")]
+    [Topic("requests", "dinner-meal-requests")]
     private static async Task<IResult> Handler(ProposedDinnerMealRequestEvent mealRequestEvent, [FromServices]MealProposalProcessor processor, [FromServices]DaprClient daprClient)
     {
         var recipe = await processor.GenerateRecipe(mealRequestEvent.MainComponent);
@@ -24,7 +24,7 @@ public static class MealProposalHandler
         Log.Information("Recipe generated with id: {RecipeId}", mealRequestEvent.RecipeId);
         
         if (mealRequestEvent.Email != null)
-            await daprClient.PublishEventAsync("pubsub", "recipes-notifications", new RecipeNotificationEvent(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, mealRequestEvent.Email, recipe));
+            await daprClient.PublishEventAsync("notifications", "recipe-notifications", new RecipeNotificationEvent(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, mealRequestEvent.Email, recipe));
         
         return TypedResults.Ok();
     }
