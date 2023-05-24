@@ -42,3 +42,24 @@ docker compose down
 ## Deploy to Azure
 
 Please refer to the [Hosting Infrastructure](infra/README.md) documentation for instructions on how to deploy the application to Azure.
+
+## Building the container images in Azure
+
+The container images are built with the following commands. The images are stored in the Azure Container Registry.
+First set the environment variable for the Azure Container Registry name:
+
+```powershell	
+$ENV:ACR="<your acr name>"
+```
+Then build the images with the following commands:
+
+```powershell
+push-location src
+push-location dinner-api
+az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/api:0.1 .
+pop-location
+push-location ai-processor
+az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/ai-processor:0.1 .
+pop-location
+```
+

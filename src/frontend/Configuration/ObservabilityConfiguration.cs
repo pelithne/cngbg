@@ -5,7 +5,7 @@ using Serilog;
 using Serilog.Sinks.OpenTelemetry;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace EmailSender.Configuration;
+namespace WebFrontend.Configuration;
 
 public static class ObservabilityConfiguration
 {

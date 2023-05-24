@@ -18,5 +18,7 @@ az deployment group create -g rg-dinner-finder -f .\env.bicep -p nameSuffix=<you
 
 The services are deployed as containers. The container images are built with the following commands. The images are stored in the Azure Container Registry.
 ```powershell
-az acr build -g rg-dinner-finder --registry acr<yourname> --image demo/ai-processor:0.1 . -f .\Dockerfile
+Push-Location ..\src\dinner-api\
+az acr build -g rg-dinner-finder -r acr<yourname> -t dinner/ai-processor:0.1 .
+Pop-Location
 ```
