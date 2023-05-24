@@ -3,12 +3,10 @@ kind: Component
 metadata:
   name: recipes
 spec:
-  type: state.redis
+  type: state.mongodb
   version: v1
   metadata:
-  - name: redisHost
-    value: redis:6379
-  - name: redisPassword
-    value: ""
+  - name: host
+    value: mongo:27017
   - name: keyPrefix
     value: "none"

@@ -1,0 +1,38 @@
+@page "/recipes"
+@using WebFrontend.Data
+@inject RecipesListService RecipesListService
+
+<h1>Generated Recipes</h1>
+
+<p></p>
+
+@if (recipes == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    @foreach (var recipe in recipes)
+    {
+        <div class="card text-bg-info mb-3">
+            <div class="card-header">Asked: <b>@recipe.MainComponent</b> Id: @recipe.RecipeId</div>
+            <div class="card-body">
+                <p class="card-text">
+                    @((MarkupString)recipe.Recipe)
+                </p>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private List<RecipeResponse>? recipes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recipes = await RecipesListService.GetRecipes();
+    }
+
+}

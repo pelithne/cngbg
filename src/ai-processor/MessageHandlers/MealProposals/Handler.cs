@@ -19,7 +19,8 @@ public static class MealProposalHandler
     {
         var recipe = await processor.GenerateRecipe(mealRequestEvent.MainComponent);
         
-        await daprClient.SaveStateAsync("recipes", mealRequestEvent.RecipeId, new GeneratedRecipe(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, recipe));
+        await daprClient.SaveStateAsync("recipes", mealRequestEvent.RecipeId, 
+            new GeneratedRecipe(mealRequestEvent.RecipeId, mealRequestEvent.MainComponent, recipe));
         
         Log.Information("Recipe generated with id: {RecipeId}", mealRequestEvent.RecipeId);
         

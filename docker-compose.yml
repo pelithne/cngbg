@@ -6,6 +6,31 @@ x-common-variables: &common-variables
 services:
 
 ## ----------------- Apps
+  frontend:
+    image: ${DOCKER_REGISTRY-}dinner-frontend
+    build:
+      context: src\frontend
+    ports:
+      - 5011:80
+    environment:
+      <<: *common-variables
+    depends_on:
+      otel-collector:
+        condition: service_started
+  frontend-dapr:
+    image: daprio/daprd:1.10.6
+    command: ["./daprd",
+     "-app-id", "frontend",
+     "-app-port", "80",
+     "-resources-path", "./components",
+     "-config", "./components/config.yaml"]   
+    volumes:
+      - "./dapr/docker/:/components"
+    depends_on:
+      frontend:
+        condition: service_started
+    network_mode: "service:frontend"
+
   dinner-api:
     image: ${DOCKER_REGISTRY-}dinner-api
     build:
@@ -14,6 +39,9 @@ services:
       - 5010:80
     environment:
       <<: *common-variables
+    depends_on:
+      otel-collector:
+        condition: service_started
   dinner-api-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
@@ -37,6 +65,9 @@ services:
       AZURE_OPENAI_API_MODEL: ${AZURE_OPENAI_API_MODEL}
       AZURE_OPENAI_API_ENDPOINT: ${AZURE_OPENAI_API_ENDPOINT}
       AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
+    depends_on:
+      otel-collector:
+        condition: service_started
   processor-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
@@ -59,6 +90,9 @@ services:
       <<: *common-variables
       AZURE_COMMUNICATION_ENDPOINT: ${AZURE_COMMUNICATION_ENDPOINT}
       AZURE_COMMUNICATION_FROM_ADDRESS: ${AZURE_COMMUNICATION_FROM_ADDRESS}
+    depends_on:
+      otel-collector:
+        condition: service_started
   email-sender-dapr:
     image: daprio/daprd:1.10.6
     command: ["./daprd",
@@ -79,6 +113,11 @@ services:
     ports:
       - 6380:6379
 
+  mongo:
+    image: mongo:6.0.6
+    ports:
+      - 27017:27017
+
   zipkin:
     image: openzipkin/zipkin:latest
     ports:
@@ -93,6 +132,9 @@ services:
       - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${APPLICATION_INSIGHTS_INSTRUMENTATION_KEY}
     volumes:
       - ./docker/otel-collector-config.yaml:/conf/config.yaml
+    depends_on:
+      zipkin:
+        condition: service_started
 
   seq:
     image: datalust/seq:latest

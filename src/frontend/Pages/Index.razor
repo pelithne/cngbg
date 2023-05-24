@@ -1,9 +1,27 @@
 ﻿@page "/"
+@using WebFrontend.Data
+@inject RecipeProposalService RecipeProposalService
 
 <PageTitle>Contoso Recipes</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Contoso Recipes</h1>
 
-Welcome to your new app.
+Welcome to Contoso Recipes, a sample app built with Blazor.
+Please enter a main ingredient to get a OpenAI GPT generated recipe.
+<EditForm Model="@_recipeRequest" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+    <InputText id="main-component" @bind-Value="_recipeRequest.MainComponent" />
+    <br >
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+
+    private RecipeRequest _recipeRequest = new();
+    private async Task HandleValidSubmit()
+    {
+        await RecipeProposalService.PostRecipeRequest(_recipeRequest);
+    }
+}
