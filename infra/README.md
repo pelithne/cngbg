@@ -9,16 +9,33 @@ az group create -l westeurope -n rg-dinner-finder
 
 ## Deploy the environment
 
-Deploy the environment with the following command. The nameSuffix parameter is used to create unique names for the resources.
+Deploy the environment with the following command. This will create the following resources:
+- Azure Container Registry (for storing the container images)
+- Azure Container App Environment for the services
+- Serverless Cosmos DB (for storing the recipes)
+- Azure Open AI and a gpt model
+- Azure Application Insights (for observability)
+- Azure Key Vault (for storing secrets)
+- Azure Service Bus (for communication between the services)
+The nameSuffix parameter is used to create unique names for the resources.
 ```powershell
 az deployment group create -g rg-dinner-finder -f .\env.bicep -p nameSuffix=<yourname>
 ```
 
+Next step is to build the container images for the services and push them to the Azure Container Registry created in the previous step.
+
 ## Build the container images for the services
 
-The services are deployed as containers. The container images are built with the following commands. The images are stored in the Azure Container Registry.
+The services are deployed as containers. To build the images please refer to the [Application readme](../README.md).
+
+## Deploy email service
+
+This is a optional service. It is used to send recipe emails to the users. It deploys:
+- Email sender service (Azure Container App)
+- Azure Communication Services 
+- Azure Email Service 
+- Azure Managed Domain (For testing purposes) 
+The service is deployed with the following command.
 ```powershell
-Push-Location ..\src\dinner-api\
-az acr build -g rg-dinner-finder -r acr<yourname> -t dinner/ai-processor:0.1 .
-Pop-Location
+az deployment group create -g rg-dinner-finder -f .\email-sending.bicep -p nameSuffix=<yourname>
 ```

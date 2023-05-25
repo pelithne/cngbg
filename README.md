@@ -49,7 +49,7 @@ The container images are built with the following commands. The images are store
 First set the environment variable for the Azure Container Registry name:
 
 ```powershell	
-$ENV:ACR="<your acr name>"
+$ENV:ACR="<your acr name>" # e.g. acr<yourname>, the nameSuffix parameter from the deployment. 
 ```
 Then build the images with the following commands:
 
@@ -60,6 +60,13 @@ az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/api:0.1 .
 pop-location
 push-location ai-processor
 az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/ai-processor:0.1 .
+pop-location
+push-location frontend
+az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/web-frontend:0.1 .
+pop-location
+push-location email-sender
+az acr build -g rg-dinner-finder -r $ENV:ACR -t dinner/email-sender:0.1 .
+pop-location
 pop-location
 ```
 

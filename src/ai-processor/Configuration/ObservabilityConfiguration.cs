@@ -17,7 +17,7 @@ public static class ObservabilityConfiguration
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.FromLogContext();
 
-            if (context.HostingEnvironment.IsDevelopment())
+            if (context.HostingEnvironment.IsDevelopment() || builder.Configuration["USE_CONSOLE_LOG_OUTPUT"] == "true")
                 serilogConfiguration.WriteTo.Console(theme: AnsiConsoleTheme.Sixteen);
 
             var otlpEndpoint = context.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];

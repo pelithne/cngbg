@@ -54,6 +54,12 @@ resource dinner_api 'Microsoft.App/containerApps@2022-11-01-preview' = {
             cpu: json('.25')
             memory: '.5Gi'
           }
+          env: [
+            {
+              name: 'USE_CONSOLE_LOG_OUTPUT'
+              value: 'true'
+            }
+          ]
         }
       ]
       scale: {
@@ -148,6 +154,10 @@ resource ai_processor 'Microsoft.App/containerApps@2022-11-01-preview' = {
               name: 'AZURE_OPENAI_API_MODEL'
               secretRef: 'open-ai-api-model'
             }
+            {
+              name: 'USE_CONSOLE_LOG_OUTPUT'
+              value: 'true'
+            }
           ]
         }
       ]
@@ -169,6 +179,71 @@ resource ai_processor 'Microsoft.App/containerApps@2022-11-01-preview' = {
                 topicName: 'dinner-meal-requests'
                 subscriptionName: 'ai-processor'
                 queueLength: '1'
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+// Web frontend
+resource web_frontend 'Microsoft.App/containerApps@2022-11-01-preview' = {
+  name: 'web-frontend'
+  location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${application_uai.id}': {}
+    }
+  }
+  properties: {
+    managedEnvironmentId: aca_env.id
+    configuration: {
+      activeRevisionsMode: 'single'
+      ingress: {
+        external: true
+        targetPort: 80
+      }
+      dapr: {
+        appId: 'web-frontend'
+        appPort: 80
+        enabled: true
+      }
+      registries: [
+        {
+          identity: application_uai.id
+          server: acr.properties.loginServer
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          image: '${acr.name}.azurecr.io/dinner/web-frontend:0.1'
+          name: 'web-frontend'
+          resources:{
+            cpu: json('.25')
+            memory: '.5Gi'
+          }
+          env: [
+            {
+              name: 'USE_CONSOLE_LOG_OUTPUT'
+              value: 'true'
+            }
+          ]
+        }
+      ]
+      scale: {
+        minReplicas: 0
+        maxReplicas: 1
+        rules: [
+          {
+            name: 'http-scale-rule'
+            http: {
+              metadata: {
+                concurrentRequests: '10'
               }
             }
           }
