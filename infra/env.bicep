@@ -6,7 +6,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
   name: 'acr${nameSuffix}'
   location: location
   sku: {
-    name: 'Standard'
+    name: 'Basic'
   }
   properties: {
     adminUserEnabled: false
@@ -217,6 +217,12 @@ resource kv 'Microsoft.KeyVault/vaults@2023-02-01' = {
     name: 'open-ai-api-model'
     properties: {
       value: deployment.properties.model.name
+    }
+  }
+  resource appinsights_connection_string 'secrets' = {
+    name: 'appinsights-connection-string'
+    properties: {
+      value: appinsights.properties.ConnectionString
     }
   }
 }

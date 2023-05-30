@@ -19,7 +19,7 @@ exporters:
   logging:
   #  verbosity: detailed
   azuremonitor:
-    endpoint: "https://dc.services.visualstudio.com/v2/track"
+    endpoint: $APPLICATION_INSIGHTS_INGESTION_ENDPOINT
     instrumentation_key: $APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
   zipkin:
     endpoint: "http://zipkin:9411/api/v2/spans"
@@ -29,13 +29,14 @@ service:
     traces:
       receivers: [otlp]
       processors: [attributes]
-      exporters: [logging, zipkin, azuremonitor]
-    metrics:
-      receivers: [otlp]
-      processors: [attributes]
-      exporters: [logging]
-    logs:
-      receivers: [otlp]
-      processors: [attributes]
-      exporters: [logging]
+      exporters: [zipkin]
+    #   exporters: [logging, zipkin, azuremonitor]
+    # metrics:
+    #   receivers: [otlp]
+    #   processors: [attributes]
+    #   exporters: [logging, azuremonitor]
+    # logs:
+    #   receivers: [otlp]
+    #   processors: [attributes]
+    #   exporters: [logging, azuremonitor]
   

@@ -2,6 +2,8 @@
 x-common-variables: &common-variables
   ASPNETCORE_ENVIRONMENT: Development
   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://otel-collector:4317'
+  SEQ_ENDPOINT: 'http://seq:5341'
+  APPLICATIONINSIGHTS_CONNECTION_STRING: ${APPLICATIONINSIGHTS_CONNECTION_STRING}
 
 services:
 
@@ -88,7 +90,7 @@ services:
       context: src\email-sender
     environment:
       <<: *common-variables
-      AZURE_COMMUNICATION_ENDPOINT: ${AZURE_COMMUNICATION_ENDPOINT}
+      AZURE_COMMUNICATION_CONNECTION_STRING: ${AZURE_COMMUNICATION_CONNECTION_STRING}
       AZURE_COMMUNICATION_FROM_ADDRESS: ${AZURE_COMMUNICATION_FROM_ADDRESS}
     depends_on:
       otel-collector:
@@ -126,10 +128,11 @@ services:
       JAVA_OPTS: '-Xms1g -Xmx1g -XX:+ExitOnOutOfMemoryError'
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.75.0
+    image: otel/opentelemetry-collector-contrib:0.78.0
     command: ["--config=conf/config.yaml"]
     environment:
       - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY=${APPLICATION_INSIGHTS_INSTRUMENTATION_KEY}
+      - APPLICATION_INSIGHTS_INGESTION_ENDPOINT=${APPLICATION_INSIGHTS_INGESTION_ENDPOINT}/v2/track
     volumes:
       - ./docker/otel-collector-config.yaml:/conf/config.yaml
     depends_on:

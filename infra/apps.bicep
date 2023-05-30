@@ -1,5 +1,6 @@
 param nameSuffix string
 param location string = resourceGroup().location
+param useOtelCollectorMonitoring bool = false
 
 // Reference existing resources
 resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' existing = {
@@ -38,6 +39,14 @@ resource dinner_api 'Microsoft.App/containerApps@2022-11-01-preview' = {
         appPort: 80
         enabled: true
       }
+      secrets: [
+        {
+          name: 'appinsights-connection-string'
+          // using the vault name in the url is a workaround for a bug in the container apps resource provider
+          keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/appinsights-connection-string'
+          identity: application_uai.id
+        }
+      ]
       registries: [
         {
           identity: application_uai.id
@@ -58,6 +67,18 @@ resource dinner_api 'Microsoft.App/containerApps@2022-11-01-preview' = {
             {
               name: 'USE_CONSOLE_LOG_OUTPUT'
               value: 'true'
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_ENDPOINT'
+              value: useOtelCollectorMonitoring == true ? 'http://otel-collector-app' : ''
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_PROTOCOL'
+              value: 'http/protobuf'
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              secretRef: 'appinsights-connection-string'
             }
           ]
         }
@@ -124,6 +145,12 @@ resource ai_processor 'Microsoft.App/containerApps@2022-11-01-preview' = {
           keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/open-ai-api-model'
           identity: application_uai.id
         }
+        {
+          name: 'appinsights-connection-string'
+          // using the vault name in the url is a workaround for a bug in the container apps resource provider
+          keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/appinsights-connection-string'
+          identity: application_uai.id
+        }
       ]
       registries: [
         {
@@ -157,6 +184,18 @@ resource ai_processor 'Microsoft.App/containerApps@2022-11-01-preview' = {
             {
               name: 'USE_CONSOLE_LOG_OUTPUT'
               value: 'true'
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_ENDPOINT'
+              value: useOtelCollectorMonitoring == true ? 'http://otel-collector-app' : ''
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_PROTOCOL'
+              value: 'http/protobuf'
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              secretRef: 'appinsights-connection-string'
             }
           ]
         }
@@ -211,6 +250,14 @@ resource web_frontend 'Microsoft.App/containerApps@2022-11-01-preview' = {
         appPort: 80
         enabled: true
       }
+      secrets: [
+        {
+          name: 'appinsights-connection-string'
+          // using the vault name in the url is a workaround for a bug in the container apps resource provider
+          keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/appinsights-connection-string'
+          identity: application_uai.id
+        }
+      ]
       registries: [
         {
           identity: application_uai.id
@@ -231,6 +278,14 @@ resource web_frontend 'Microsoft.App/containerApps@2022-11-01-preview' = {
             {
               name: 'USE_CONSOLE_LOG_OUTPUT'
               value: 'true'
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_ENDPOINT'
+              value: useOtelCollectorMonitoring == true ? 'http://otel-collector-app' : ''
+            }
+            {
+              name: 'OTEL_EXPORTER_OTLP_PROTOCOL'
+              value: 'http/protobuf'
             }
           ]
         }

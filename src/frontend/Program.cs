@@ -1,6 +1,9 @@
+using WebFrontend.Configuration;
 using WebFrontend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.ConfigureTelemetry("web-frontend");
 
 // Add services to the container.
 builder.Services.AddRazorPages();

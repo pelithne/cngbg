@@ -97,6 +97,12 @@ resource email_sender 'Microsoft.App/containerApps@2022-11-01-preview' = {
           keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/com-connection-string'
           identity: application_uai.id
         }
+        {
+          name: 'appinsights-connection-string'
+          // using the vault name in the url is a workaround for a bug in the container apps resource provider
+          keyVaultUrl: 'https://${kv.name}.vault.azure.net/secrets/appinsights-connection-string'
+          identity: application_uai.id
+        }
       ]
       registries: [
         {
@@ -126,6 +132,10 @@ resource email_sender 'Microsoft.App/containerApps@2022-11-01-preview' = {
             {
               name: 'USE_CONSOLE_LOG_OUTPUT'
               value: 'true'
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              secretRef: 'appinsights-connection-string'
             }
           ]
         }

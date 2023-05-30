@@ -15,7 +15,7 @@ public class RecipeEmailSender
 
     public RecipeEmailSender(IConfiguration configuration)
     {
-        _emailClient = new EmailClient(configuration["AZURE_COMMUNICATION_ENDPOINT"]);
+        _emailClient = new EmailClient(configuration["AZURE_COMMUNICATION_CONNECTION_STRING"]);
         _sender = configuration["AZURE_COMMUNICATION_FROM_ADDRESS"];
     }
 

@@ -21,9 +21,15 @@ AZURE_OPENAI_API_MODEL="<your model here>" # e.g. gpt-35-turbo
 AZURE_OPENAI_API_ENDPOINT="<your azure openai endpoint here>" 
 AZURE_OPENAI_API_KEY="<your azure openai key here>"
 
-AZURE_COMMUNICATION_ENDPOINT="<your azure communication endpoint here>" 
+AZURE_COMMUNICATION_CONNECTION_STRING="<your azure communication connection string here>" 
 AZURE_COMMUNICATION_FROM_ADDRESS="<your azure communication custom domain from address here>"
+
+# for OpenTelemetry Collector (optional, needs to be enabled in the open telemetry collector config)
 APPLICATION_INSIGHTS_INSTRUMENTATION_KEY="<your application insights instrumentation key here>"
+APPLICATION_INSIGHTS_INGESTION_ENDPOINT="<your application insights ingestion endpoint here(part of the connectionstring)>"
+
+# for OpenTelemetry Azure Exporter (optional)
+APPLICATIONINSIGHTS_CONNECTION_STRING="<your application insights connection string here>"
 ```
 
 Then you can run the application with the following command:

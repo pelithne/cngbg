@@ -1,4 +1,5 @@
-﻿using OpenTelemetry.Metrics;
+﻿using Azure.Monitor.OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
@@ -15,6 +16,7 @@ public static class ObservabilityConfiguration
         {
             var serilogConfiguration = configuration
                 .ReadFrom.Configuration(context.Configuration)
+                .Enrich.WithProperty("Application", appName)
                 .Enrich.FromLogContext();
 
             if (context.HostingEnvironment.IsDevelopment() || builder.Configuration["USE_CONSOLE_LOG_OUTPUT"] == "true")
@@ -29,20 +31,31 @@ public static class ObservabilityConfiguration
                 serilogConfiguration.WriteTo.OpenTelemetry(options =>
                 {
                     options.Protocol = protocol;
-                    options.Endpoint = $"{otlpEndpoint}/v1/logs";
+                    options.Endpoint = protocol == OtlpProtocol.HttpProtobuf ? $"{otlpEndpoint}/v1/logs" : otlpEndpoint;
                     options.ResourceAttributes = new Dictionary<string, object>()
                     {
                         ["service.name"] = appName,
                     };
                 });
             }
+
+            var seqEndpoint = context.Configuration["SEQ_ENDPOINT"];
+            if (!string.IsNullOrEmpty(seqEndpoint))
+            {
+                serilogConfiguration.WriteTo.Seq(seqEndpoint);
+            }
         });
 
         var resourceBuilder = ResourceBuilder.CreateDefault().AddService(serviceName: appName, serviceVersion: "0.1");
         
+        var appInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+
         builder.Services.AddOpenTelemetry()
             .WithTracing(tracingBuilder =>
             {
+                if (!string.IsNullOrEmpty(appInsightsConnectionString))
+                    tracingBuilder.AddAzureMonitorTraceExporter(options => options.ConnectionString = appInsightsConnectionString);	
+
                 tracingBuilder
                     .AddOtlpExporter()
                     .SetResourceBuilder(resourceBuilder)
@@ -52,6 +65,9 @@ public static class ObservabilityConfiguration
             })
             .WithMetrics(metricsBuilder =>
             {
+                if (!string.IsNullOrEmpty(appInsightsConnectionString))
+                    metricsBuilder.AddAzureMonitorMetricExporter(options => options.ConnectionString = appInsightsConnectionString);	
+
                 metricsBuilder
                     .AddOtlpExporter()
                     .SetResourceBuilder(resourceBuilder)
