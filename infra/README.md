@@ -28,6 +28,13 @@ Next step is to build the container images for the services and push them to the
 
 The services are deployed as containers. To build the images please refer to the [Application readme](../README.md).
 
+## Deploy the main application
+
+Before this step the containers must be built. The main application is deployed with the following command:
+```powershell
+az deployment group create -g rg-dinner-finder -f .\apps.bicep -p nameSuffix=<yourname>
+```
+
 ## Deploy email service
 
 This is a optional service. It is used to send recipe emails to the users. It deploys:

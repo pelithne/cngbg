@@ -244,6 +244,9 @@ resource web_frontend 'Microsoft.App/containerApps@2022-11-01-preview' = {
       ingress: {
         external: true
         targetPort: 80
+        stickySessions: {
+          affinity: 'sticky'
+        }
       }
       dapr: {
         appId: 'web-frontend'
@@ -286,6 +289,10 @@ resource web_frontend 'Microsoft.App/containerApps@2022-11-01-preview' = {
             {
               name: 'OTEL_EXPORTER_OTLP_PROTOCOL'
               value: 'http/protobuf'
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              secretRef: 'appinsights-connection-string'
             }
           ]
         }
