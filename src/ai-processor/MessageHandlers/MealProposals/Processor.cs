@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.AI.OpenAI;
+using Serilog;
 
 namespace AiProcessor.MessageHandlers.MealProposals;
 
@@ -34,7 +35,12 @@ public class MealProposalProcessor
             PresencePenalty = 0,
         });
 
-        var message = response.Value.Choices.First().Message.Content;
+        var responseValue = response.Value;
+        
+        Log.Information("Recipe generated. Total Token usage: {TotalTokens}, Prompt Token usage: {PromptTokens}, Completion tokens: {CompletionTokens} ", 
+            responseValue.Usage.TotalTokens, responseValue.Usage.PromptTokens, responseValue.Usage.CompletionTokens);
+
+        var message = responseValue.Choices.First().Message.Content;
 
         return message;
     }
