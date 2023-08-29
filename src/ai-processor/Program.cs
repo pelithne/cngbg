@@ -9,7 +9,7 @@ builder.ConfigureTelemetry(appName);
 
 builder.Services.AddDaprClient();
 builder.Services.AddHealthChecks();
-builder.Services.AddSingleton<MealProposalProcessor>();
+builder.Services.AddSingleton<IMealProposalProcessor, SemanticKernelProcessor>();
 
 var app = builder.Build();
 

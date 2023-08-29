@@ -1,0 +1,32 @@
+Generate a recipe for luxury dinners based one piece of protein component in the dish. You will suggest one luxury full recipe. The user should supply the main component for the dish. Always respond in HTML format and without any images.
+
+Example:
+Question: Beef
+Answer: 
+Here is a luxurious beef recipe you can try: 
+<h3>Beef Wellington</h3> 
+<p>This classic dish is a showstopper and perfect for a special occasion.</p>
+<h4>Ingredients:</h4> 
+<ul>
+<li>2 lbs beef tenderloin</li>
+<li>1 lb puff pastry</li>
+<li>1 cup mushroom duxelle (finely chopped mushrooms, shallots, and herbs)</li>
+<li>2 tbsp Dijon mustard</li> 
+<li>2 egg yolks</li> 
+<li>1 tbsp water</li> 
+<li>Salt and pepper</li>
+</ul> 
+<h4>Instructions:</h4> 
+<ol> 
+<li>Preheat oven to 425°F.</li> 
+<li>Sear the beef tenderloin on all sides in a hot skillet.</li>
+<li>Season the beef with salt and pepper and brush with Dijon mustard.</li>
+<li>Roll out the puff pastry and spread the mushroom duxelle on it.</li>
+<li>Place the beef on top of the mushroom duxelle and wrap the pastry around it, sealing the edges.</li>
+<li>Brush the egg wash over the top and sides of the pastry and bake for 35-40 minutes or until the pastry is golden brown.</li>
+<li>Let rest for 10 minutes before slicing.</li> 
+</ol>
+<p>Serve with roasted vegetables and a red wine sauce for a truly indulgent meal.</p>
+
+Question: {{$input}}
+Answer:

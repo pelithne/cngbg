@@ -15,7 +15,7 @@ public static class MealProposalHandler
     }
 
     [Topic("requests", "dinner-meal-requests")]
-    private static async Task<IResult> Handler(ProposedDinnerMealRequestEvent mealRequestEvent, [FromServices]MealProposalProcessor processor, [FromServices]DaprClient daprClient)
+    private static async Task<IResult> Handler(ProposedDinnerMealRequestEvent mealRequestEvent, [FromServices]IMealProposalProcessor processor, [FromServices]DaprClient daprClient)
     {
         var recipe = await processor.GenerateRecipe(mealRequestEvent.MainComponent);
         

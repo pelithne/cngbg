@@ -20,7 +20,7 @@ services:
       otel-collector:
         condition: service_started
   frontend-dapr:
-    image: daprio/daprd:1.10.6
+    image: daprio/daprd:1.11.2
     command: ["./daprd",
      "-app-id", "frontend",
      "-app-port", "80",
@@ -45,7 +45,7 @@ services:
       otel-collector:
         condition: service_started
   dinner-api-dapr:
-    image: daprio/daprd:1.10.6
+    image: daprio/daprd:1.11.2
     command: ["./daprd",
      "-app-id", "dinner-api",
      "-app-port", "80",
@@ -71,7 +71,7 @@ services:
       otel-collector:
         condition: service_started
   processor-dapr:
-    image: daprio/daprd:1.10.6
+    image: daprio/daprd:1.11.2
     command: ["./daprd",
      "-app-id", "ai-processor",
      "-app-port", "80",
@@ -96,7 +96,7 @@ services:
       otel-collector:
         condition: service_started
   email-sender-dapr:
-    image: daprio/daprd:1.10.6
+    image: daprio/daprd:1.11.2
     command: ["./daprd",
      "-app-id", "email-sender",
      "-app-port", "80",

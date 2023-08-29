@@ -27,7 +27,7 @@ public static class ObservabilityConfiguration
             {
                 var protocol = context.Configuration["OTEL_EXPORTER_OTLP_PROTOCOL"] == "http/protobuf"
                     ? OtlpProtocol.HttpProtobuf
-                    : OtlpProtocol.GrpcProtobuf;
+                    : OtlpProtocol.Grpc;
                 serilogConfiguration.WriteTo.OpenTelemetry(options =>
                 {
                     options.Protocol = protocol;

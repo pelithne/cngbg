@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Generates a recipe for a dish based on the ingredients provided.",
+  "completion": {
+    "max_tokens": 1000,
+    "temperature": 0.8,
+    "top_p": 1,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "The ingredients to use in the recipe.",
+        "defaultValue": ""
+      }
+    ]
+  }
+}

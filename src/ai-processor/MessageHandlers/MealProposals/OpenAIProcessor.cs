@@ -4,12 +4,12 @@ using Serilog;
 
 namespace AiProcessor.MessageHandlers.MealProposals;
 
-public class MealProposalProcessor
+public class OpenAIProcessor : IMealProposalProcessor
 {
     private readonly OpenAIClient _client;
     private readonly string _model;
 
-    public MealProposalProcessor(IConfiguration configuration)
+    public OpenAIProcessor(IConfiguration configuration)
     {
         _model = configuration["AZURE_OPENAI_API_MODEL"];
         _client = new OpenAIClient(

@@ -25,6 +25,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
+app.MapSubscribeHandler();
+
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
