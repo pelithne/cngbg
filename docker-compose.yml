@@ -11,7 +11,7 @@ services:
   frontend:
     image: ${DOCKER_REGISTRY-}dinner-frontend
     build:
-      context: src\frontend
+      context: src/frontend
     ports:
       - 5011:80
     environment:
@@ -36,7 +36,7 @@ services:
   dinner-api:
     image: ${DOCKER_REGISTRY-}dinner-api
     build:
-      context: src\dinner-api
+      context: src/dinner-api
     ports:
       - 5010:80
     environment:
@@ -61,7 +61,7 @@ services:
   processor:
     image: ${DOCKER_REGISTRY-}processor
     build:
-      context: src\ai-processor
+      context: src/ai-processor
     environment:
       <<: *common-variables
       AZURE_OPENAI_API_MODEL: ${AZURE_OPENAI_API_MODEL}
@@ -87,7 +87,7 @@ services:
   email-sender:
     image: ${DOCKER_REGISTRY-}email-sender
     build:
-      context: src\email-sender
+      context: src/email-sender
     environment:
       <<: *common-variables
       AZURE_COMMUNICATION_CONNECTION_STRING: ${AZURE_COMMUNICATION_CONNECTION_STRING}
