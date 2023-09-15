@@ -1,0 +1,9 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/dotnet:7.0",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/dapr/cli/dapr-cli:0": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {}
+  }
+}
